@@ -1,29 +1,29 @@
 fn main() {
-    let start: u32 = 2;
-    let end: u32 = 10;
 
-    fn print_type_of<T>(_: &T) {
-        println!("{}", std::any::type_name::<T>())
-    }
-
+    let start:u32 = 2;
+    let end:u32 = 20;
 
     let mut nums: Vec<u32> = (start..end+1).collect();
-    println!("{:?}", nums);
-    let mut found_vals: Vec<u32> = Vec::new();
+
+    let mut res_values: Vec<u32> = Vec::new();
     
-    for num in &nums {
-        if !found_vals.contains(num) {
-            let mut current_power: u32 = 1;
-            while num.pow(current_power+1) < end {
-                current_power += 1
-            }
-            found_vals.push(num.pow(current_power));
-            let index = nums.iter().position(|&x| x%num == 0).unwrap();
-            println!("{:?}", index);
-            // println!("{} has maximum power of {} -> {:?}", num, current_power, found_vals);
-        
+    while nums.len() > 0 {
+        let mut current_num = nums[0];
+        let mut current_pow = 1;
+        while current_num.pow(current_pow+1) < end {
+            current_pow += 1
         }
+        res_values.push(current_num.pow(current_pow));
+        nums.retain(|x| *x % current_num != 0);
+        println!("{:?}", nums);
+    }
+    println!("{:?}", res_values);
+    
+    let mut cum_prod: u32 = 1;
+
+    for val in res_values {
+        cum_prod *= val
     }
 
-    // println!("{:?}", nums);
+    println!("Final value is: {}", cum_prod);
 }
